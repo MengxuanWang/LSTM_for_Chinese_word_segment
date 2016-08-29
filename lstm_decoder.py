@@ -40,3 +40,6 @@ def segment_from_console():
         sentence = sys.stdin.readline()
 
 #segment_from_console()
+
+seq = "讲述的是白清羽穷兵黩武后的四十年。东陆内部虚弱，皇室屡有皇嗣争夺和大臣擅权，外围诸侯自立。"
+print(seg(seq))
