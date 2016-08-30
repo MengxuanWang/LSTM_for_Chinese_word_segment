@@ -41,5 +41,8 @@ def segment_from_console():
 
 #segment_from_console()
 
-seq = "讲述的是白清羽穷兵黩武后的四十年。东陆内部虚弱，皇室屡有皇嗣争夺和大臣擅权，外围诸侯自立。"
+# segment demo
+seq = "《九州缥缈录》是江南的幻想史诗巨著，共6卷。以虚构的“九州”世界为背景，徐徐展开一轴腥风血雨的乱世长卷。"
 print(seg(seq))
+seq1 = "他骑着火红的战马要去拯救天下，却发现马蹄下踩满了弱者的尸骨。"
+print(seg(seq1))
