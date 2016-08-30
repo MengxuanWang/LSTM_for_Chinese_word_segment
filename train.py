@@ -26,6 +26,18 @@ X_test, y_test, vocab = load_data('./corpus/msr_test_gold.utf8')
 model = LSTM(EMBEDDING_DIM, HIDDEN_DIM,\
     NUM_CLASSES, WIN_SIZE, len(vocab), bptt_truncate=-1)
 
+# load trained model
+# floder = os.path.abspath(os.path.join(os.path.curdir, "runs"))
+# hyperparams = {
+#     "embedding_dim" : EMBEDDING_DIM,
+#     "hidden_dim" : HIDDEN_DIM,
+#     "num_clas" : NUM_CLASSES,
+#     "wind_size" : WIN_SIZE,
+#     "vocab_size" : len(vocab)
+# }
+#
+# model = load_model(floder, LSTM, hyperparams)
+
 # callback
 def sgd_callback(model, num_example_seen):
     loss = model.calculate_loss(X_test, y_test)
