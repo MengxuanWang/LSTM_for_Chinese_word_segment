@@ -80,18 +80,18 @@ def convert_predicts_to_segments(predicts, seq):
     i = 0
     segs = []
     while(i < len(seq)):
-        if predicts[i] == 3:
-            segs.append(seq[i])
-            i = i + 1
-        elif predicts[i] == 0:
+        if predicts[i] == 0:
             j = i + 1
-            while(j < len(seq) and predicts[j] != 2):
+            while (j < len(seq) and predicts[j] != 2):
                 j += 1
             if j == len(seq):
                 segs.append(seq[i:j])
             else:
-                segs.append(seq[i:j+1])
+                segs.append(seq[i:j + 1])
             i = j + 1
+        if i < len(seq) and predicts[i] != 0:
+            segs.append(seq[i])
+            i += 1
     return segs
 
 def load_model(floder, modelClass, hyperparams):
