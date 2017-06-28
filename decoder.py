@@ -24,25 +24,24 @@ hyperparams = {
 
 model = load_model(floder, LSTM, hyperparams)
 
-def seg(seq):
-    word_to_index = [vocab[char] if vocab.get(char) else 0 for char in seq]
+def seg(sentence):
+    word_to_index = [vocab[char] if vocab.get(char) else 0 for char in sentence]
     idxs = context_win(word_to_index, WIN_SIZE)
     predicts = model.predict_class(idxs)
-    segs = convert_predicts_to_segments(predicts, seq)
-    return segs
+    words = segment(predicts, sentence)
+    return words
 
 def segment_from_console():
     sentence = sys.stdin.readline()
     while sentence:
         sentence = sentence.strip('\n')
         result = seg(sentence)
-        print(result)
+        print(' '.join(result))
         sentence = sys.stdin.readline()
 
-#segment_from_console()
+if __name__ == "__main__":
+    # sentence = "《九州缥缈录》是江南的幻想史诗巨著，共6卷。以虚构的“九州”世界为背景，徐徐展开一轴腥风血雨的乱世长卷。"
+    # words = seg(sentence)
+    # print(' '.join(words))
 
-# segment demo
-seq = "《九州缥缈录》是江南的幻想史诗巨著，共6卷。以虚构的“九州”世界为背景，徐徐展开一轴腥风血雨的乱世长卷。"
-print(seg(seq))
-seq1 = "他骑着火红的战马要去拯救天下，却发现马蹄下踩满了弱者的尸骨。"
-print(seg(seq1))
+    segment_from_console()

@@ -13,32 +13,30 @@ def load_vocabulary(fpath = './runs/vocab'):
             vocabulary[split[0]] = int(split[1])
     return vocabulary
 
-def context_win(l, win):
+def context_win(words_index, wind_size):
     '''
-    win : int corresponding to the size of the window
-    given a list of indexes composing a sentence
-    l : array containing the word indexes
+    wind_size : int
+      corresponding to the size of the window given a list of indexes composing a sentence
+    words_index : list
+      array containing words index
 
-    it will return a list of indexes corresponding to contex windows surrounding
-    each word in the sentence
+    Return a list of indexes corresponding to contex windows surrounding each word
+    in the sentence
     '''
-    assert (win % 2) == 1
-    assert win >= 1
-    l = list(l)
+    assert (wind_size % 2) == 1
+    assert wind_size >= 1
+    words_index = list(words_index)
 
-    lpadded = win // 2 * [-1] + l + win // 2 * [-1]
-    out = [lpadded[i:(i+win)] for i in range(len(l))]
+    lpadded = wind_size // 2 * [-1] + words_index + wind_size // 2 * [-1]
+    out = [lpadded[i:(i+wind_size)] for i in range(len(words_index))]
 
-    assert len(out) == len(l)
+    assert len(out) == len(words_index)
     return np.array(out, dtype=np.int32)
 
+Status = ['B', 'M', 'E', 'S']
+
 def load_data(fpath = './corpus/train.utf8', wind_size=7):
-    '''
-    0(B) : for a character located at the beginng of a word.
-    1(I) : for a character inside of a word.
-    2(E) : for a character at the end of a word.
-    3(S) : for a character that is a word by itself.
-    '''
+
     X_train, Y_train = [], []
     vocabulary = load_vocabulary()
     with open(fpath) as f:
@@ -75,24 +73,28 @@ def train_with_sgd(model, X_train, y_train, learning_rate=0.001, \
                 callback(model, num_example_seen)
     return model
 
-def convert_predicts_to_segments(predicts, seq):
-    assert len(predicts) == len(seq)
-    i = 0
-    segs = []
-    while(i < len(seq)):
-        if predicts[i] == 3:
-            segs.append(seq[i])
-            i = i + 1
-        elif predicts[i] == 0:
-            j = i + 1
-            while(j < len(seq) and predicts[j] != 2):
-                j += 1
-            if j == len(seq):
-                segs.append(seq[i:j])
-            else:
-                segs.append(seq[i:j+1])
-            i = j + 1
-    return segs
+def convert_predict_to_pos(predicts):
+    pos_list = [Status[p] for p in predicts]
+    return pos_list
+
+def segment(predicts, sentence):
+    pos_list = convert_predict_to_pos(predicts)
+    assert len(pos_list) == len(sentence)
+    words = []
+    begin, nexti = 0, 0
+    for i, char in enumerate(sentence):
+        pos = pos_list[i]
+        if pos == 'B':
+            begin = i
+        elif pos == 'E':
+            words += [sentence[begin:i+1]]
+            nexti = i + 1
+        elif pos == 'S':
+            words += [char]
+            nexti = i + 1
+    if nexti < len(sentence):
+        words += [sentence[nexti:]]
+    return words
 
 def load_model(floder, modelClass, hyperparams):
     print("loading model from %s." % floder)

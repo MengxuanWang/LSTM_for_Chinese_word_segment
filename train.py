@@ -12,7 +12,7 @@ LEARNING_RATE =  float(os.environ.get("LEARNING_RATE", "0.001"))
 EMBEDDING_DIM = int(os.environ.get("EMBEDDING_DIM", "50"))
 HIDDEN_DIM = int(os.environ.get("HIDDEN_DIM", "128"))
 NUM_CLASSES = int(os.environ.get("NUM_CLASSES", "4"))
-WIN_SIZE = int(os.environ.get("WIN_SIZE", 7))
+WIND_SIZE = int(os.environ.get("WIND_SIZE", 7))
 
 # Training parameters
 NEPOCH = int(os.environ.get("NEPOCH", "20"))
@@ -24,7 +24,7 @@ X_test, y_test, vocab = load_data('./corpus/msr_test_gold.utf8')
 
 # build model
 model = LSTM(EMBEDDING_DIM, HIDDEN_DIM,\
-    NUM_CLASSES, WIN_SIZE, len(vocab), bptt_truncate=-1)
+    NUM_CLASSES, WIND_SIZE, len(vocab), bptt_truncate=-1)
 
 # load trained model
 # floder = os.path.abspath(os.path.join(os.path.curdir, "runs"))
