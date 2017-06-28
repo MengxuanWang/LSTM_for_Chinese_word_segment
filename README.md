@@ -1,7 +1,29 @@
-基于LSTM的中文分词系统
+## 基于LSTM的中文分词系统
+
+# 运行环境
+
+python3 
+
+theano 
+
+numpy
+
+# 如何使用 
+
+## Train
+
+`$ python3 train.py`
+
+## Test 
+
+`$ python3 decoder.py`
+
+`lstm model has been loaded.` 
+
+ 在console输入句子回车显示分词结果
 
 
-分词效果：
+# 分词效果
 
 [In]
 
